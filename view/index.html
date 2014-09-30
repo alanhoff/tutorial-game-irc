@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+        @import url(/style/fonts/clear-sans.css);
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #faf8ef;
+            color: #776e65;
+            font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+            font-size: 18px;
+        }
+
+        iframe {
+            border: none;
+            width: 50%;
+            height: 700px;
+            float: left;
+            overflow: hidden;
+        }
+
+        #moves {
+            float: right;
+            width: 50%;
+        }
+
+        #moves p strong {
+            color: black;
+        }
+
+        #moves p small {
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <iframe src="/game"></iframe>
+    <div id="moves">
+        <h1>Last moves</h1>
+        <div>
+            <p><strong>Nenhum</strong> <small>movimento ainda</small></p>
+        </div>
+        <h3>How to play</h3>
+        <p>Enter any one of those comands in the Twitch.tv chat: UP, DOWN, LEFT, RIGHT and RESET. Wait a little bit so see your movent. Twitch.tv have a 14 seconds delay, be patient.</p>
+    </div>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var client = io.connect();
+        client.on('command', function(desc){
+            $('#moves div').prepend('<p><strong>' + desc.command.toUpperCase() + '</strong> <small>by ' + desc.user + '</small></p>');
+
+            if($('#moves div p').length > 5)
+                while($('#moves div p').length > 5){
+                    $('#moves div p:last').remove();
+                }
+        });
+    </script>
+</body>
+</html>
